@@ -3,6 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/SignRanks_jar</output-path>
     <root id="archive" name="SignRanks.jar">
       <element id="module-output" name="SignRanks" />
+      <element id="extracted-dir" path="$USER_HOME$/Spigot/Vault.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

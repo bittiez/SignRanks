@@ -1,0 +1,10 @@
+name: SignRanks
+version: 1.0.0
+author: bittiez
+main: US.bittiez.SignRanks.main
+permissions:
+    SignRanks.use:
+        description: Allows the use of a rank sign
+    SignRanks.create:
+        description: Allows creating of rank signs
+softdepent: [Vault]
