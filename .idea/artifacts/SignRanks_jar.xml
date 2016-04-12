@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SignRanks:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SignRanks_jar</output-path>
+    <root id="archive" name="SignRanks.jar">
+      <element id="module-output" name="SignRanks" />
+    </root>
+  </artifact>
+</component>
