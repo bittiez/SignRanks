@@ -5,6 +5,11 @@ main: US.bittiez.SignRanks.main
 permissions:
     SignRanks.use:
         description: Allows the use of a rank sign
+        default: op
     SignRanks.create:
         description: Allows creating of rank signs
+        default: op
+    SignRanks.break:
+        description: Allows breaking of SignRanks signs
+        default: op
 softdepent: [Vault]
