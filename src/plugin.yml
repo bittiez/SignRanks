@@ -2,6 +2,11 @@ name: SignRanks
 version: 1.0.0
 author: bittiez
 main: US.bittiez.SignRanks.main
+commands:
+    SignRanks:
+        description: Reload config and sign data files.
+        usage: /SignRanks reload
+        permission: SignRanks.reload
 permissions:
     SignRanks.use:
         description: Allows the use of a rank sign
@@ -11,5 +16,8 @@ permissions:
         default: op
     SignRanks.break:
         description: Allows breaking of SignRanks signs
+        default: op
+    SignRanks.reload:
+        description: Reload the config and Sign Data files
         default: op
 softdepent: [Vault]

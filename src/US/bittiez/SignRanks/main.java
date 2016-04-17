@@ -6,6 +6,8 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -14,7 +16,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -73,16 +74,25 @@ public class main extends JavaPlugin implements Listener{
         loadSignData();
     }
 
-    @EventHandler
-    public void onWorldSave(WorldSaveEvent event) {
-        try {
-            signData.save(new File(this.getDataFolder(), "signData.yml"));
-        } catch (IOException e) {
-            e.printStackTrace();
+    public boolean onCommand(CommandSender who, Command cmd, String label, String[] args) {
+        if(cmd.getName().equalsIgnoreCase("signranks")){
+            if(who instanceof Player)
+                if(args[0].equalsIgnoreCase("reload")){
+                    if(who.hasPermission("SignRanks.reload")){
+                        loadConfig();
+                        loadSignData();
+                        who.sendMessage(ChatColor.GOLD + "Reloaded Sign Ranks config and data files!");
+                        return true;
+                    } else {
+                        log.warning(who.getName() + " tried to use /SignRanks reload without the SignRanks.reload permission!");
+                        return true;
+                    }
+                }
         }
+        return false;
     }
 
-        @EventHandler
+    @EventHandler
     public void main(SignChangeEvent sign){
         Player who = sign.getPlayer();
         String group, cost;
@@ -97,13 +107,23 @@ public class main extends JavaPlugin implements Listener{
                         sign.setLine(SIGNLINES.ID, ChatColor.MAGIC + id);
 
                         String[] signInfo = {
-                                group, cost, "commands: /spawn, /spawn"
+                                group, cost
                         };
 
                         signData.set("signs." + id, signInfo);
+                        signData.set("signs." + id + ".commands", new String[] {""});
+                        saveSignData();
                     }
                 }
             }
+        }
+    }
+
+    private void saveSignData(){
+        try {
+            signData.save(new File(this.getDataFolder(), "signData.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -181,6 +201,7 @@ public class main extends JavaPlugin implements Listener{
             String group = sign.getLine(SIGNLINES.GROUP);
             Double cost = Double.parseDouble(sign.getLine(SIGNLINES.COST));
             String id = sign.getLine(SIGNLINES.ID);
+            id = ChatColor.stripColor(id);
             boolean proceed = false;
             if(cost > 0) {
                 if (purchase(who, cost)) {
@@ -195,6 +216,16 @@ public class main extends JavaPlugin implements Listener{
                 if(permission.playerAddGroup(null, who, group)) {
                     who.sendMessage(ChatColor.translateAlternateColorCodes('&', changedGroup));
                     permission.playerRemoveGroup(null, who, prevGroup);
+
+                    List<String> commands = signData.getStringList("signs." + id + ".commands");
+                    if(commands.size() > 0){
+                        for(String s : commands){
+                            if(s.startsWith("/"))
+                                s = s.substring(1);
+
+                            who.performCommand(s);
+                        }
+                    }
                 }
                 else {
                     who.sendMessage(ChatColor.translateAlternateColorCodes('&', failedToChangePermission));
