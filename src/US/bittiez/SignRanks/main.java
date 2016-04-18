@@ -186,13 +186,6 @@ public class main extends JavaPlugin implements Listener{
             if(!sign.getLine(SIGNLINES.GROUP).isEmpty())
                 if(sign.getLine(SIGNLINES.ID).startsWith(ChatColor.MAGIC + ""))
                     return true ;
-                else
-                    log.warning("Err 1");
-            else
-                log.warning("Err 3");
-        else
-            log.warning("Err 4");
-
         return false;
     }
 
