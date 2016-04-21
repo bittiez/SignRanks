@@ -76,18 +76,22 @@ public class main extends JavaPlugin implements Listener{
 
     public boolean onCommand(CommandSender who, Command cmd, String label, String[] args) {
         if(cmd.getName().equalsIgnoreCase("signranks")){
-            if(who instanceof Player)
-                if(args[0].equalsIgnoreCase("reload")){
-                    if(who.hasPermission("SignRanks.reload")){
-                        loadConfig();
-                        loadSignData();
-                        who.sendMessage(ChatColor.GOLD + "Reloaded Sign Ranks config and data files!");
-                        return true;
-                    } else {
-                        log.warning(who.getName() + " tried to use /SignRanks reload without the SignRanks.reload permission!");
-                        return true;
+            if(who instanceof Player) {
+                if(args.length > 0) {
+                    if (args[0].equalsIgnoreCase("reload")) {
+                        if (who.hasPermission("SignRanks.reload")) {
+                            loadConfig();
+                            loadSignData();
+                            who.sendMessage(ChatColor.GOLD + "Reloaded Sign Ranks config and data files!");
+                            return true;
+                        } else {
+                            log.warning(who.getName() + " tried to use /SignRanks reload without the SignRanks.reload permission!");
+                            return true;
+                        }
                     }
-                }
+                } else
+                    return true;
+            }
         }
         return false;
     }
@@ -137,6 +141,14 @@ public class main extends JavaPlugin implements Listener{
                     if(!event.getPlayer().hasPermission("SignRanks.break")) {
                         handleSignClick(event.getPlayer(), sign);
                         event.setCancelled(true);
+                    } else {
+                        String id = sign.getLine(SIGNLINES.ID);
+                        id = ChatColor.stripColor(id);
+                        if(signData.contains("signs." + id)){
+                            signData.set("signs."+id, null);
+                            saveSignData();
+                        }
+                        sign.getBlock().breakNaturally();
                     }
                 }
             }
@@ -203,6 +215,12 @@ public class main extends JavaPlugin implements Listener{
                     who.sendMessage(ChatColor.translateAlternateColorCodes('&', notEnoughMoney));
             } else
                 proceed = true;
+
+            if(signData.get("signs." + id) == null){
+                proceed = false;
+                log.warning(who.getName() + " tried to use a SignRanks sign that is not a valid sign!");
+            }
+
 
             if(proceed){
                 String prevGroup = permission.getPrimaryGroup(who);
