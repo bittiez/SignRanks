@@ -10,18 +10,18 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Spigot/spigot-1.9.2.jar!/" />
+          <root url="jar://$USER_HOME$/Desktop/Spigot Dev/spigot-1.9.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$USER_HOME$/Spigot/spigot-1.9.2.jar!/" />
+          <root url="jar://$USER_HOME$/Desktop/Spigot Dev/spigot-1.9.2.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Spigot/plugins/Vault.jar!/" />
+          <root url="jar://$USER_HOME$/Desktop/Spigot Dev/plugins/Vault.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

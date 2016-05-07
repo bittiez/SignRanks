@@ -3,7 +3,9 @@ package US.bittiez.SignRanks;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
@@ -116,6 +118,7 @@ public class main extends JavaPlugin implements Listener{
 
                         signData.set("signs." + id, signInfo);
                         signData.set("signs." + id + ".commands", new String[] {""});
+                        signData.set("signs." + id + ".consoleCommands", new String[] {""});
                         saveSignData();
                     }
                 }
@@ -235,6 +238,18 @@ public class main extends JavaPlugin implements Listener{
                                 s = s.substring(1);
 
                             who.performCommand(s);
+                        }
+                    }
+
+                    List<String> consoleCommands = signData.getStringList("signs." + id + ".consoleCommands");
+                    if(consoleCommands.size() > 0){
+                        for(String s : consoleCommands){
+                            if(s.startsWith("/"))
+                                s = s.substring(1);
+
+                            s = s.replaceAll("(\\[USERNAME\\])", who.getName());
+
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s);
                         }
                     }
                 }
