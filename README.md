@@ -16,8 +16,11 @@ Allows placing signs that will set a players rank and run various commands after
 Your sign should look like this:
 
 [SignRanks] (Or the title set in the config)
+
 newGroup
+
 cost
+
 BLANK
 
 
