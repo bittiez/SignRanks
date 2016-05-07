@@ -11,6 +11,15 @@ Allows placing signs that will set a players rank and run various commands after
 - Commands are customizable via config file
 - All messages are configurable(Other than error messages)
 
+#Usage
+
+Your sign should look like this:
+
+[SignRanks] (Or the title set in the config)
+newGroup
+cost
+BLANK
+
 
 #Permissions
 
@@ -28,6 +37,7 @@ https://github.com/bittiez/SignRanks/blob/master/src/plugin.yml
 Global configuration is inside the config.yml file, this contains messages and the sign title(default is [SignRanks]) which can all be customized.
 
 Individual signs configuration will be inside the signData.yml file, here you can add commands to run after the players group has been changed.
+There are commands and consoleCommands in this config, the consoleCommands can use [USERNAME] to be replaced with the players name.
 
 
 #To-Do/Upcoming features
