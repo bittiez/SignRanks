@@ -211,13 +211,16 @@ public class main extends JavaPlugin implements Listener{
             String id = sign.getLine(SIGNLINES.ID);
             id = ChatColor.stripColor(id);
             boolean proceed = false;
-            if(cost > 0) {
-                if (purchase(who, cost)) {
-                    proceed = true;
+            String prevGroup = permission.getPrimaryGroup(who);
+            if(prevGroup != group) {
+                if (cost > 0) {
+                    if (purchase(who, cost)) {
+                        proceed = true;
+                    } else
+                        who.sendMessage(ChatColor.translateAlternateColorCodes('&', notEnoughMoney));
                 } else
-                    who.sendMessage(ChatColor.translateAlternateColorCodes('&', notEnoughMoney));
-            } else
-                proceed = true;
+                    proceed = true;
+            }
 
             if(signData.get("signs." + id) == null){
                 proceed = false;
@@ -225,41 +228,39 @@ public class main extends JavaPlugin implements Listener{
             }
 
 
-            if(proceed){
-                String prevGroup = permission.getPrimaryGroup(who);
-                if(permission.playerAddGroup(null, who, group)) {
-                    who.sendMessage(ChatColor.translateAlternateColorCodes('&', changedGroup));
-                    permission.playerRemoveGroup(null, who, prevGroup);
+            if(proceed && prevGroup != group){
+                    if (permission.playerAddGroup(null, who, group)) {
+                        who.sendMessage(ChatColor.translateAlternateColorCodes('&', changedGroup));
+                        permission.playerRemoveGroup(null, who, prevGroup);
 
-                    List<String> commands = signData.getStringList("signs." + id + ".commands");
-                    if(commands.size() > 0){
-                        for(String s : commands){
-                            if(s.startsWith("/"))
-                                s = s.substring(1);
+                        List<String> commands = signData.getStringList("signs." + id + ".commands");
+                        if (commands.size() > 0) {
+                            for (String s : commands) {
+                                if (s.startsWith("/"))
+                                    s = s.substring(1);
 
-                            who.performCommand(s);
+                                who.performCommand(s);
+                            }
                         }
-                    }
 
-                    List<String> consoleCommands = signData.getStringList("signs." + id + ".consoleCommands");
-                    if(consoleCommands.size() > 0){
-                        for(String s : consoleCommands){
-                            if(s.startsWith("/"))
-                                s = s.substring(1);
+                        List<String> consoleCommands = signData.getStringList("signs." + id + ".consoleCommands");
+                        if (consoleCommands.size() > 0) {
+                            for (String s : consoleCommands) {
+                                if (s.startsWith("/"))
+                                    s = s.substring(1);
 
-                            s = s.replaceAll("(\\[USERNAME\\])", who.getName());
+                                s = s.replaceAll("(\\[USERNAME\\])", who.getName());
 
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s);
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s);
+                            }
                         }
+                    } else {
+                        who.sendMessage(ChatColor.translateAlternateColorCodes('&', failedToChangePermission));
+                        log.warning(who.getName() + " tried to use a SignRanks sign to change their group, there was an error changing their permission." +
+                                String.format("[Who: %1] [Sign Location: %2] [Attempted Group: %3] [Sign ID: %4]", who.getName(), sign.getLocation().toString(), group, id));
+                        if (cost > 0)
+                            refund(who, cost);
                     }
-                }
-                else {
-                    who.sendMessage(ChatColor.translateAlternateColorCodes('&', failedToChangePermission));
-                    log.warning(who.getName() + " tried to use a SignRanks sign to change their group, there was an error changing their permission." +
-                            String.format("[Who: %1] [Sign Location: %2] [Attempted Group: %3] [Sign ID: %4]", who.getName(), sign.getLocation().toString(), group, id));
-                    if(cost > 0)
-                        refund(who, cost);
-                }
             }
         } else {
             who.sendMessage(ChatColor.RED + "You do not have permission to use this sign!");

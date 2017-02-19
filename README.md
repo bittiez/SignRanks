@@ -1,13 +1,13 @@
 #SignRanks
 
-Spigot 1.9 plugin to add more control to group changing signs.
+Spigot 1.11.2 plugin to add more control to group changing signs.
 
 
 #Description
-
+Note: This requires Vault
 Allows placing signs that will set a players rank and run various commands afterword.
 
-- Can cost money or be free(Vault required)
+- Can cost money or be free
 - Commands are customizable via config file
 - All messages are configurable(Other than error messages)
 
