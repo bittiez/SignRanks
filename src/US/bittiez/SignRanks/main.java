@@ -99,7 +99,7 @@ public class main extends JavaPlugin implements Listener{
     }
 
     @EventHandler
-    public void main(SignChangeEvent sign){
+    public void onSignChange(SignChangeEvent sign){
         Player who = sign.getPlayer();
         String group, cost;
         if(who.hasPermission("SignRanks.create")) {
@@ -122,6 +122,7 @@ public class main extends JavaPlugin implements Listener{
                         signData.set("signs." + id + ".commands", new String[] {""});
                         signData.set("signs." + id + ".consoleCommands", new String[] {""});
                         saveSignData();
+                        who.sendMessage(String.format("SignRanks sign created! [Sign ID: %1] [To add commands you will need this ID, and need to edit the config file.]", id));
                     }
                 }
             }
@@ -137,7 +138,7 @@ public class main extends JavaPlugin implements Listener{
     }
 
     @EventHandler
-    public void main(BlockBreakEvent event){
+    public void onBlockBreak(BlockBreakEvent event){
         Block block = event.getBlock();
         if(block != null)
             if(block.getState() instanceof Sign){
@@ -160,7 +161,7 @@ public class main extends JavaPlugin implements Listener{
     }
 
     @EventHandler
-    public void main(PlayerInteractEvent event){
+    public void onPlayerInteract(PlayerInteractEvent event){
         Block block = event.getClickedBlock();
         if(block != null)
             if(block.getState() instanceof Sign){
@@ -202,7 +203,7 @@ public class main extends JavaPlugin implements Listener{
         if(sign.getLine(SIGNLINES.TITLE).equalsIgnoreCase(titlePrefix + signTitle))
             if(!sign.getLine(SIGNLINES.GROUP).isEmpty())
                 if(sign.getLine(SIGNLINES.ID).startsWith(ChatColor.MAGIC + ""))
-                    return true ;
+                    return true;
         return false;
     }
 
