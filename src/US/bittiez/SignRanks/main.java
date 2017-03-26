@@ -109,6 +109,8 @@ public class main extends JavaPlugin implements Listener{
                         cost = sign.getLine(SIGNLINES.COST);
                         Random r = new Random();
                         String id = r.nextInt(100000) + "";
+                        while(signData.contains("signs." + id))
+                            id = r.nextInt(100000) + "";
                         sign.setLine(SIGNLINES.TITLE, titlePrefix + signTitle);
                         sign.setLine(SIGNLINES.ID, ChatColor.MAGIC + id);
 
