@@ -1,9 +1,9 @@
-#SignRanks
+# SignRanks
 
-Spigot 1.11.2 plugin to add more control to group changing signs.
+Spigot 1.11 plugin to add more control to group changing signs.
 
 
-#Description
+# Description
 Note: This requires Vault
 Allows placing signs that will set a players rank and run various commands afterword.
 
@@ -11,7 +11,7 @@ Allows placing signs that will set a players rank and run various commands after
 - Commands are customizable via config file
 - All messages are configurable(Other than error messages)
 
-#Usage
+# Usage
 
 Your sign should look like this:
 
@@ -24,26 +24,26 @@ cost
 BLANK
 
 
-#Permissions
+# Permissions
 
 https://github.com/bittiez/SignRanks/blob/master/src/plugin.yml
 
 
-#Installation
+# Installation
 
 - Place the jar file in your plugins folder
 - Restart your server
 
 
-#Configuration
+# Configuration
 
 Global configuration is inside the config.yml file, this contains messages and the sign title(default is [SignRanks]) which can all be customized.
 
-Individual signs configuration will be inside the signData.yml file, here you can add commands to run after the players group has been changed.
+Individual signs configuration will be inside the signData.yml file, here you can add commands to run after the players group has been changed.  
 There are commands and consoleCommands in this config, the consoleCommands can use [USERNAME] to be replaced with the players name.
 
 
-#To-Do/Upcoming features
+# To-Do/Upcoming features
 
 - Add a /signranks id command that will tell you the sign's id you are looking at (For editing the config)
 - Add a SignRanks.ignore permission that will make it so that group can't use signrank signs(Mostly for mods and admins so when they break signs they don't change their group also)
