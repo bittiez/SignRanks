@@ -29,13 +29,11 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 /**
- * Created by bittiez on 11/04/16.
- */
-/**
 Sign setup:
  [SignRanks]
  Group
  Cost
+ BLANK
 */
 
 public class main extends JavaPlugin implements Listener{
@@ -52,6 +50,26 @@ public class main extends JavaPlugin implements Listener{
     @Override
     public void onEnable(){
         log = getLogger();
+
+        vaultOnEnable();
+        if(permissionOnEnable()) {
+            getServer().getPluginManager().registerEvents(this, this);
+            loadConfig();
+            loadSignData();
+        }
+    }
+
+    private boolean permissionOnEnable(){
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        permission = rsp.getProvider();
+        if(permission == null){
+            log.warning("Could not find a permission plugin! SignRanks will not load without a permission plugin!");
+            getServer().getPluginManager().disablePlugin(this);
+            return false;
+        }
+        return true;
+    }
+    private void vaultOnEnable(){
         Plugin vault = getServer().getPluginManager().getPlugin("Vault");
         if(vault == null){
             log.warning("Vault was not detected! SignRanks will still work but will not be able to charge players to use signs.");
@@ -62,23 +80,10 @@ public class main extends JavaPlugin implements Listener{
             } else
                 economy = rsp.getProvider();
         }
-
-        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        permission = rsp.getProvider();
-        if(permission == null){
-            log.warning("Could not find a permission plugin! SignRanks will not load without a permission plugin!");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
-        getServer().getPluginManager().registerEvents(this, this);
-        loadConfig();
-        loadSignData();
     }
 
     public boolean onCommand(CommandSender who, Command cmd, String label, String[] args) {
         if(cmd.getName().equalsIgnoreCase("signranks")){
-            if(who instanceof Player) {
                 if(args.length > 0) {
                     if (args[0].equalsIgnoreCase("reload")) {
                         if (who.hasPermission("SignRanks.reload")) {
@@ -93,7 +98,6 @@ public class main extends JavaPlugin implements Listener{
                     }
                 } else
                     return true;
-            }
         }
         return false;
     }
@@ -179,14 +183,12 @@ public class main extends JavaPlugin implements Listener{
         if(!signFile.exists()) {
             try {
                 signFile.createNewFile();
+                signData = YamlConfiguration.loadConfiguration(signFile);
             } catch (IOException e) {
                 e.printStackTrace();
+                getServer().getPluginManager().disablePlugin(this);
             }
         }
-        if(signFile.exists())
-            signData = YamlConfiguration.loadConfiguration(signFile);
-        else
-            getServer().getPluginManager().disablePlugin(this);
     }
 
     private void loadConfig(){
