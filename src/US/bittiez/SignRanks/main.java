@@ -31,7 +31,7 @@ public class main extends JavaPlugin {
         vaultOnEnable();
         if (permissionOnEnable()) {
             loadConfig();
-            SignUtils.loadSignDataInto(getDataFolder(), SignEventListener.signDataConfigFile, signData);
+            signData = SignUtils.loadSignDataInto(getDataFolder(), SignEventListener.signDataConfigFile);
             signEventListener = new SignEventListener(this, signData, economy, permission, log);
             getServer().getPluginManager().registerEvents(signEventListener, this);
         } else {
@@ -68,7 +68,7 @@ public class main extends JavaPlugin {
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (who.hasPermission("SignRanks.reload")) {
                         loadConfig();
-                        SignUtils.loadSignDataInto(getDataFolder(), SignEventListener.signDataConfigFile, signData);
+                        signData = SignUtils.loadSignDataInto(getDataFolder(), SignEventListener.signDataConfigFile);
                         who.sendMessage(ChatColor.GOLD + "Reloaded Sign Ranks config and data files!");
                         return true;
                     } else {

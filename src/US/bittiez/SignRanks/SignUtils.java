@@ -26,7 +26,7 @@ public class SignUtils {
         return false;
     }
 
-    public static FileConfiguration loadSignDataInto(File dataFolder, String fileName, FileConfiguration signDataConfig) {
+    public static FileConfiguration loadSignDataInto(File dataFolder, String fileName) {
         File signFile = new File(dataFolder, fileName);
         if (!signFile.exists()) {
             try {
