@@ -26,15 +26,17 @@ public class SignUtils {
         return false;
     }
 
-    public static void loadSignDataInto(File dataFolder, String fileName, FileConfiguration signDataConfig) {
+    public static FileConfiguration loadSignDataInto(File dataFolder, String fileName, FileConfiguration signDataConfig) {
         File signFile = new File(dataFolder, fileName);
         if (!signFile.exists()) {
             try {
                 signFile.createNewFile();
-                signDataConfig = YamlConfiguration.loadConfiguration(signFile);
+                return YamlConfiguration.loadConfiguration(signFile);
             } catch (IOException e) {
-                signDataConfig = new YamlConfiguration();
+                return new YamlConfiguration();
             }
+        } else {
+            return YamlConfiguration.loadConfiguration(signFile);
         }
     }
 }
